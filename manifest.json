@@ -1,5 +1,5 @@
 {
-  "name": "Braille — Text to Braille Translator",
+  "name": "Braille",
   "short_name": "Braille",
   "start_url": "./index.html",
   "display": "standalone",
