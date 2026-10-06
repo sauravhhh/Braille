@@ -73,7 +73,10 @@ footer{text-align:center;padding:20px;font-size:12px;color:var(--muted);}
     <button class="btn primary" id="copyBtn" onclick="copyOut()" disabled>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copy
     </button>
-    <button class="btn" onclick="clearAll()">
+        <button class="btn" onclick="shareIt()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>Share
+    </button>
+<button class="btn" onclick="clearAll()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>Clear
     </button>
   </div>
@@ -114,6 +117,17 @@ function toast(t){
   const el = document.getElementById("toast");
   el.textContent = t; el.classList.add("show");
   setTimeout(()=>el.classList.remove("show"), 1600);
+}
+function shareIt(){
+  const has = !output.classList.contains("empty");
+  const data = has
+    ? { title: "Braille", text: output.textContent }
+    : { title: "Braille", text: "Try Braille", url: location.href };
+  if(navigator.share){ navigator.share(data).catch(()=>{}); return; }
+  const t = has ? output.textContent : location.href;
+  const done = ()=>toast("Copied \u2014 paste it anywhere to share");
+  if(navigator.clipboard){ navigator.clipboard.writeText(t).then(done); }
+  else{ const ta=document.createElement("textarea"); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); done(); }
 }
 function copyOut(){
   const t = output.textContent;
